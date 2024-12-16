@@ -104,10 +104,38 @@
     </style>
 
     <script type="module">
-        const $testCases = document.querySelectorAll('.test-cases')
         const $globalCode = document.querySelector('#global')
         const $sendButton = document.querySelector('.send-button')
-    </script>
+
+        async function runTest({code, data }) {
+            
+            const duration = 1000 
+        }
+
+        async function runTestCases() {
+            const $testCases = document.querySelectorAll('.test-case')
+            const globalCode = $globalCode.value;
+            
+            $testCases.forEach((testCase) =>{
+                const $code = testCase.querySelector('.code')
+                const $ops = testCase.querySelector('.ops')
+
+                const codeValue = $code.value
+                $ops.textContent = 'Loading...'
+                console.log($ops);
+                 
+                
+            })
+
+        }
+
+        runTestCases()
+
+        $sendButton.addEventListener('click', ()=>{
+            runTestCases()
+        } )
+
+</script>
 </head>
 
 <body>
