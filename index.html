@@ -110,19 +110,42 @@
         async function runTest({code, data }) {
             
             const duration = 1000 
+
+            let result
+            try {
+                result = await eval(`(async () => {
+                   let PERF__ops = 0;
+                   let PERF__start = Date.now();
+                   let PERF__end = Date.now() + ${duration};
+                   ${data};
+
+                   while (Date.now() < PERF__end){
+                     ${code};
+                     PERF__ops++;
+                   }
+                   return PERF__ops
+
+            })()`)
+                
+            } catch (error) {
+                result = 0
+            }
+            return result
         }
 
         async function runTestCases() {
             const $testCases = document.querySelectorAll('.test-case')
             const globalCode = $globalCode.value;
             
-            $testCases.forEach((testCase) =>{
+            $testCases.forEach(async testCase =>{
                 const $code = testCase.querySelector('.code')
                 const $ops = testCase.querySelector('.ops')
 
                 const codeValue = $code.value
                 $ops.textContent = 'Loading...'
-                console.log($ops);
+                const result = await runTest({code: codeValue, data: globalCode})
+                $ops.textContent = `${result.toLocaleString()} op/s`
+                
                  
                 
             })
